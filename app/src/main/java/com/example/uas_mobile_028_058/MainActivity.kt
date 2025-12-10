@@ -13,35 +13,71 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.uas_mobile_028_058.ui.theme.UAS_Mobile_028_058Theme
 
-class MainActivity : ComponentActivity() {
+import androidx.appcompat.app.AppCompatActivity
+import android.util.Log
+
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
+import com.example.uas_mobile_028_058.api.ApiClient
+import com.example.uas_mobile_028_058.api.ApiService
+import com.example.uas_mobile_028_058.models.Event
+import com.example.uas_mobile_028_058.models.ApiResponse
+import com.example.uas_mobile_028_058.models.Stats
+
+class MainActivity : AppCompatActivity() {
+
+    private val api = ApiClient.instance
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            UAS_Mobile_028_058Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+        setContentView(R.layout.activity_main)
+
+        getAllEvents()
+        // createEventExample()
+    }
+
+    private fun getAllEvents() {
+        api.getAllEvents().enqueue(object : Callback<ApiResponse<List<Event>>> {
+            override fun onResponse(
+                call: Call<ApiResponse<List<Event>>>,
+                response: Response<ApiResponse<List<Event>>>
+            ) {
+                if (response.isSuccessful) {
+                    val events = response.body()?.data
+                    Log.d("API", "Events: $events")
                 }
             }
-        }
+
+            override fun onFailure(call: Call<ApiResponse<List<Event>>>, t: Throwable) {
+                Log.e("API", "Error: ${t.message}")
+            }
+        })
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+    private fun createEventExample() {
+        val event = Event(
+            title = "Workshop Kotlin",
+            date = "2025-12-01",
+            time = "14:00:00",
+            location = "Tech Hub Jakarta",
+            description = "Belajar Kotlin",
+            capacity = 50,
+            status = "upcoming"
+        )
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    UAS_Mobile_028_058Theme {
-        Greeting("Android")
+        api.createEvent(event).enqueue(object : Callback<ApiResponse<Event>> {
+            override fun onResponse(
+                call: Call<ApiResponse<Event>>,
+                response: Response<ApiResponse<Event>>
+            ) {
+                Log.d("API", "Created: ${response.body()}")
+            }
+
+            override fun onFailure(call: Call<ApiResponse<Event>>, t: Throwable) {
+                Log.e("API", "Error: ${t.message}")
+            }
+        })
     }
 }
