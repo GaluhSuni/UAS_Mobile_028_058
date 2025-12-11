@@ -1,68 +1,67 @@
 package com.example.uas_mobile_028_058.ui.theme.main
 
-import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import android.widget.Toast
-//import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.uas_mobile_028_058.api.ApiClient
-import com.example.uas_mobile_028_058.api.ApiService
-//import com.example.uas_mobile_028_058.databinding.ActivityMainBinding
-import com.example.uas_mobile_028_058.models.ApiResponse
-import com.example.uas_mobile_028_058.models.Event
-import com.example.uas_mobile_028_058.models.Stats
-import com.example.uas_mobile_028_058.ui.theme.create.CreateEventActivity
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 
-class MainActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var adapter: EventAdapter
-
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        adapter = EventAdapter(emptyList())
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.adapter = adapter
-
-        binding.fabAdd.setOnClickListener {
-            startActivity(Intent(this, CreateEventActivity::class.java))
+        setContent {
+            EventListScreen()
         }
-
-        loadEvents()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        loadEvents()
-    }
-
-    private fun loadEvents() {
-        val service = ApiClient.instance.create(EventApiService::class.java)
-        service.getAllEvents().enqueue(object : Callback<ApiResponse<List<Event>>> {
-            override fun onResponse(
-                call: Call<ApiResponse<List<Event>>>,
-                response: Response<ApiResponse<List<Event>>>
-            ) {
-                if (response.isSuccessful && response.body()?.data != null) {
-                    adapter.updateData(response.body()!!.data!!)
-                } else {
-                    Toast.makeText(this@MainActivity, "Gagal memuat data", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<ApiResponse<List<Event>>>, t: Throwable) {
-                Toast.makeText(this@MainActivity, t.message, Toast.LENGTH_LONG).show()
-            }
-        })
     }
 }
+
+
+//class MainActivity : AppCompatActivity() {
+//
+//    private lateinit var binding: ActivityMainBinding
+//    private lateinit var adapter: EventAdapter
+//
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//
+//        binding = ActivityMainBinding.inflate(layoutInflater)
+//        setContentView(binding.root)
+//
+//        adapter = EventAdapter(emptyList())
+//        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+//        binding.recyclerView.adapter = adapter
+//
+//        binding.fabAdd.setOnClickListener {
+//            startActivity(Intent(this, CreateEventActivity::class.java))
+//        }
+//
+//        loadEvents()
+//    }
+//
+//    override fun onResume() {
+//        super.onResume()
+//        loadEvents()
+//    }
+//
+//    private fun loadEvents() {
+//        val service = ApiClient.instance.create(EventApiService::class.java)
+//        service.getAllEvents().enqueue(object : Callback<ApiResponse<List<Event>>> {
+//            override fun onResponse(
+//                call: Call<ApiResponse<List<Event>>>,
+//                response: Response<ApiResponse<List<Event>>>
+//            ) {
+//                if (response.isSuccessful && response.body()?.data != null) {
+//                    adapter.updateData(response.body()!!.data!!)
+//                } else {
+//                    Toast.makeText(this@MainActivity, "Gagal memuat data", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<ApiResponse<List<Event>>>, t: Throwable) {
+//                Toast.makeText(this@MainActivity, t.message, Toast.LENGTH_LONG).show()
+//            }
+//        })
+//    }
+//}
 
 
 //class MainActivity : AppCompatActivity() {
