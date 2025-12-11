@@ -22,7 +22,8 @@ import com.example.uas_mobile_028_058.viewmodel.EventViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateEventScreen(
-    viewModel: EventViewModel = EventViewModel()
+    viewModel: EventViewModel = EventViewModel(),
+    onBack: () -> Unit
 ) {
     var title by remember { mutableStateOf("") }
     var date by remember { mutableStateOf("") }
@@ -101,16 +102,16 @@ fun CreateEventScreen(
             Button(
                 onClick = {
                     viewModel.createEvent(
-                        title = title,
-                        date = date,
-                        time = time,
-                        location = location,
-                        status = status,
-                        description = description.ifEmpty { null },
-                        capacity = capacity.toIntOrNull()
+                        title,
+                        date,
+                        time,
+                        location,
+                        status,
+                        description.ifEmpty { null },
+                        capacity.toIntOrNull()
                     )
-                },
-                modifier = Modifier.fillMaxWidth()
+                    onBack()
+                }
             ) {
                 Text("Save Event")
             }
@@ -118,49 +119,20 @@ fun CreateEventScreen(
     }
 }
 
-
-
-//class CreateEventScreen : AppCompatActivity() {
-//
-//    private lateinit var binding: ActivityCreateEventBinding
-//
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        binding = ActivityCreateEventBinding.inflate(layoutInflater)
-//        setContentView(binding.root)
-//
-//        binding.btnSave.setOnClickListener {
-//            createEvent()
-//        }
-//    }
-//
-//    private fun createEvent() {
-//
-//        val event = Event(
-//            title = binding.etTitle.text.toString(),
-//            date = binding.etDate.text.toString(),
-//            time = binding.etTime.text.toString(),
-//            location = binding.etLocation.text.toString(),
-//            status = binding.etStatus.text.toString(),        // wajib
-//            description = binding.etDesc.text.toString().ifEmpty { null },
-//            capacity = binding.etCapacity.text.toString().toIntOrNull()
-//        )
-//
-//
-//        val service = ApiClient.instance.create(ApiService::class.java)
-//        service.createEvent(event).enqueue(object : Callback<ApiResponse<Event>> {
-//            override fun onResponse(
-//                call: Call<ApiResponse<Event>>,
-//                response: Response<ApiResponse<Event>>
+//            Button(
+//                onClick = {
+//                    viewModel.createEvent(
+//                        title = title,
+//                        date = date,
+//                        time = time,
+//                        location = location,
+//                        status = status,
+//                        description = description.ifEmpty { null },
+//                        capacity = capacity.toIntOrNull()
+//                    )
+//                },
+//                modifier = Modifier.fillMaxWidth()
 //            ) {
-//                Toast.makeText(this@CreateEventScreen, response.body()?.message, Toast.LENGTH_LONG)
-//                    .show()
-//                finish()
+//                Text("Save Event")
 //            }
-//
-//            override fun onFailure(call: Call<ApiResponse<Event>>, t: Throwable) {
-//                Toast.makeText(this@CreateEventScreen, t.message, Toast.LENGTH_LONG).show()
-//            }
-//        })
-//    }
-//}
+//        }

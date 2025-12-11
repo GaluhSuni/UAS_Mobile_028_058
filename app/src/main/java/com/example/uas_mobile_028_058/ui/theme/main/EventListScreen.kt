@@ -15,19 +15,17 @@ import com.example.uas_mobile_028_058.viewmodel.EventViewModel
 @Composable
 fun EventListScreen(
     viewModel: EventViewModel = EventViewModel(),
-    onEventClick: (Int) -> Unit = {}
+    onCreateClick: () -> Unit
 ) {
     val events by viewModel.events.collectAsState()
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text("Event List") }
-            )
+            CenterAlignedTopAppBar(title = { Text("Event List") })
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { viewModel.navigateToCreate() }) {
-                Text("+", style = MaterialTheme.typography.titleLarge)
+            FloatingActionButton(onClick = onCreateClick) {
+                Text("+")
             }
         }
     ) { padding ->
@@ -37,11 +35,12 @@ fun EventListScreen(
                 .padding(16.dp)
         ) {
             items(events) { event ->
-                EventItem(event = event, onClick = { onEventClick(event.id!!) })
+                EventItem(event = event, onClick = {})
             }
         }
     }
 }
+
 
 @Composable
 fun EventItem(event: Event, onClick: () -> Unit) {
@@ -83,3 +82,32 @@ fun EventItem(event: Event, onClick: () -> Unit) {
     }
 }
 
+//fun EventListScreen(
+//    viewModel: EventViewModel = EventViewModel(),
+//    onEventClick: (Int) -> Unit = {}
+//) {
+//    val events by viewModel.events.collectAsState()
+//
+//    Scaffold(
+//        topBar = {
+//            CenterAlignedTopAppBar(
+//                title = { Text("Event List") }
+//            )
+//        },
+//        floatingActionButton = {
+//            FloatingActionButton(onClick = { viewModel.navigateToCreate() }) {
+//                Text("+", style = MaterialTheme.typography.titleLarge)
+//            }
+//        }
+//    ) { padding ->
+//        LazyColumn(
+//            modifier = Modifier
+//                .padding(padding)
+//                .padding(16.dp)
+//        ) {
+//            items(events) { event ->
+//                EventItem(event = event, onClick = { onEventClick(event.id!!) })
+//            }
+//        }
+//    }
+//}

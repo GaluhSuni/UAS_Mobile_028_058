@@ -3,13 +3,15 @@ package com.example.uas_mobile_028_058.ui.theme.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import com.example.uas_mobile_028_058.navigation.AppNavHost
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
-            EventListScreen()
+            AppNavHost()
         }
     }
 }
